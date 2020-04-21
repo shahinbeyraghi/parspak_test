@@ -4,8 +4,14 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
+            @if(Session::has('message'))
+                <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+            @endif
             <div class="card">
-                <div class="card-header">Users Directory</div>
+                <div class="card-header">
+                    Users Directory
+                    <a class="btn btn-outline-primary float-right" href="{{route('user-directory')}}" role="button">Create Directory</a>
+                </div>
 
                 <div class="card-body">
                     <table class="table">

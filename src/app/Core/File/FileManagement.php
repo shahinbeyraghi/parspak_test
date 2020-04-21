@@ -10,13 +10,14 @@ namespace App\Core\File;
 
 
 use App\Core\General\Statics;
+use Illuminate\Support\Facades\Auth;
 
 trait FileManagement
 {
 
-    public function createFile($fileName)
+    public function createFile()
     {
-        $address = Statics::FILE_ADDRESS . $fileName;
+        $address = Statics::FILE_ADDRESS . escapeshellcmd(Auth::user()->name);
         if (is_file($address)) {
             return true;
         } elseif (!is_file($address)) {
@@ -26,9 +27,9 @@ trait FileManagement
     }
 
 
-    public function createDirectory($directoryName)
+    public function createDirectory()
     {
-        $address = Statics::DIRECTORY_ADDRESS . $directoryName;
+        $address = Statics::DIRECTORY_ADDRESS . escapeshellcmd(Auth::user()->name);
         if (is_dir($address)) {
             return true;
         }

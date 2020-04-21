@@ -14,6 +14,7 @@ use App\Core\General\AppResponse;
 use App\Core\OS\GetListFromOS;
 use App\Http\Controllers\General\AppBaseController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class FileManagementController extends AppBaseController
 {
@@ -22,26 +23,28 @@ class FileManagementController extends AppBaseController
 
     public function createUserFile()
     {
-        $fileCreate = $this->createFile(md5(Auth::user()->name));
+        $fileCreate = $this->createFile();
         if ($fileCreate) {
-            $response = new \stdClass();
-            $response->file_create = true;
-            return new AppResponse(200, $response);
+            Session::flash('message', 'File Created');
+            Session::flash('alert-class', 'alert-success');
+        } else {
+            Session::flash('message', 'Create File Failed!');
+            Session::flash('alert-class', 'alert-danger');
         }
-
-        return new AppResponse(500);
+        return redirect('users/files-name');
     }
 
     public function createUserDirectory()
     {
-        $fileCreate = $this->createDirectory(md5(Auth::user()->name));
+        $fileCreate = $this->createDirectory();
         if ($fileCreate) {
-            $response = new \stdClass();
-            $response->file_create = true;
-            return new AppResponse(200, $response);
+            Session::flash('message', 'Directory Created');
+            Session::flash('alert-class', 'alert-success');
+        } else {
+            Session::flash('message', 'Create Directory Failed!');
+            Session::flash('alert-class', 'alert-danger');
         }
-
-        return new AppResponse(500);
+        return redirect('users/directories-name');
     }
 
     public function listFiles()

@@ -13,7 +13,6 @@ use App\Core\File\FileManagement;
 use App\Core\General\AppResponse;
 use App\Core\OS\GetListFromOS;
 use App\Http\Controllers\General\AppBaseController;
-use Illuminate\Support\Facades\Auth;
 
 class FileManagementController extends AppBaseController
 {
@@ -22,7 +21,7 @@ class FileManagementController extends AppBaseController
 
     public function createUserFile()
     {
-        $fileCreate = $this->createFile(escapeshellcmd(Auth::user()->name));
+        $fileCreate = $this->createFile();
         if ($fileCreate) {
             $response = new \stdClass();
             $response->file_create = true;
@@ -34,7 +33,7 @@ class FileManagementController extends AppBaseController
 
     public function createUserDirectory()
     {
-        $fileCreate = $this->createDirectory(escapeshellcmd(Auth::user()->name));
+        $fileCreate = $this->createDirectory();
         if ($fileCreate) {
             $response = new \stdClass();
             $response->file_create = true;

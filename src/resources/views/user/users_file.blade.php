@@ -4,8 +4,14 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
+            @if(Session::has('message'))
+                <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+            @endif
             <div class="card">
-                <div class="card-header">Users File</div>
+                <div class="card-header">
+                    Users File
+                    <a class="btn btn-outline-primary float-right" href="{{route('user-file')}}" role="button">Create File</a>
+                </div>
 
                 <div class="card-body">
                     <table class="table">
