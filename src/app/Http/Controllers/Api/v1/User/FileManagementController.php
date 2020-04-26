@@ -9,19 +9,25 @@
 namespace App\Http\Controllers\Api\v1\User;
 
 
-use App\Core\File\FileManagement;
+use App\Core\File\CreateUserDirectoryHandler;
+use App\Core\File\CreateUserDirectoryRequest;
+use App\Core\File\CreateUserFileHandler;
+use App\Core\File\CreateUserFileRequest;
+use App\Core\File\getUserDirectoriesHandler;
+use App\Core\File\getUserFilesHandler;
 use App\Core\General\AppResponse;
-use App\Core\OS\GetListFromOS;
 use App\Http\Controllers\General\AppBaseController;
+use Illuminate\Http\Request;
 
 class FileManagementController extends AppBaseController
 {
-    use FileManagement;
-    use GetListFromOS;
-
-    public function createUserFile()
+    /**
+     * @param CreateUserFileRequest $request
+     * @return AppResponse
+     */
+    public function createUserFile(CreateUserFileRequest $request)
     {
-        $fileCreate = $this->createFile();
+        $fileCreate = (resolve(CreateUserFileHandler::class))->Handle($request);
         if ($fileCreate) {
             $response = new \stdClass();
             $response->file_create = true;
@@ -31,10 +37,14 @@ class FileManagementController extends AppBaseController
         return new AppResponse(500);
     }
 
-    public function createUserDirectory()
+    /**
+     * @param CreateUserDirectoryRequest $request
+     * @return AppResponse
+     */
+    public function createUserDirectory(CreateUserDirectoryRequest $request)
     {
-        $fileCreate = $this->createDirectory();
-        if ($fileCreate) {
+        $directoryCreate = (resolve(CreateUserDirectoryHandler::class))->Handle($request);
+        if ($directoryCreate) {
             $response = new \stdClass();
             $response->file_create = true;
             return new AppResponse(200, $response);
@@ -43,9 +53,13 @@ class FileManagementController extends AppBaseController
         return new AppResponse(500);
     }
 
-    public function listFiles()
+    /**
+     * @param Request $request
+     * @return AppResponse
+     */
+    public function listFiles(Request $request)
     {
-        $filesList = $this->getUsersFile();
+        $filesList = (resolve(getUserFilesHandler::class))->Handle($request);
         if ($filesList) {
             $response = new \stdClass();
             $response->list = $filesList;
@@ -55,12 +69,16 @@ class FileManagementController extends AppBaseController
         return new AppResponse(204);
     }
 
-    public function listDirectories()
+    /**
+     * @param Request $request
+     * @return AppResponse
+     */
+    public function listDirectories(Request $request)
     {
-        $filesList = $this->getUsersDirectory();
-        if ($filesList) {
+        $directoriesList = (resolve(getUserDirectoriesHandler::class))->Handle($request);
+        if ($directoriesList) {
             $response = new \stdClass();
-            $response->list = $filesList;
+            $response->list = $directoriesList;
             return new AppResponse(200, $response);
         }
 

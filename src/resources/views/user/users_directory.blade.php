@@ -7,10 +7,15 @@
             @if(Session::has('message'))
                 <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
             @endif
+            @if($errors->first('directory_name'))
+                <p class="alert alert-danger">{{ $errors->first('directory_name') }}</p>
+            @endif
             <div class="card">
                 <div class="card-header">
                     Users Directory
-                    <a class="btn btn-outline-primary float-right" href="{{route('user-directory')}}" role="button">Create Directory</a>
+                    <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#exampleModalCenter">
+                        Create Directory
+                    </button>
                 </div>
 
                 <div class="card-body">
@@ -35,4 +40,5 @@
         </div>
     </div>
 </div>
+@include('user.user_directory_form')
 @endsection

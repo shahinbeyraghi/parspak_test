@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth.basic')
     ->get('server/run-process', 'Api\v1\Monitoring\ServerStatusController@runProcess');
 Route::middleware('auth.basic')
-    ->get('user/create-file', 'Api\v1\User\FileManagementController@createUserFile');
+    ->post('user/create-file', 'Api\v1\User\FileManagementController@createUserFile');
 Route::middleware('auth.basic')
-    ->get('user/create-directory', 'Api\v1\User\FileManagementController@createUserDirectory');
+    ->post('user/create-directory', 'Api\v1\User\FileManagementController@createUserDirectory');
 Route::middleware('auth.basic')
     ->get('user/list-files', 'Api\v1\User\FileManagementController@listFiles');
 Route::middleware('auth.basic')

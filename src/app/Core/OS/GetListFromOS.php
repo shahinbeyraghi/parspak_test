@@ -11,6 +11,7 @@ namespace App\Core\OS;
 
 use App\Core\General\OSTrait;
 use App\Core\General\Statics;
+use Illuminate\Support\Facades\Auth;
 
 trait GetListFromOS
 {
@@ -18,7 +19,9 @@ trait GetListFromOS
 
     public function getUsersFile()
     {
-        $filesList = $this->runCommand(Statics::GET_USERS_FILE)[0] ?? '';
+        $baseAddress = Statics::BASE_ADDRESS . Auth::user()->id;
+        $command = str_replace('{baseAddress}', $baseAddress, Statics::GET_USERS_FILE);
+        $filesList = $this->runCommand($command)[0] ?? '';
         $filesList = explode(',', $filesList);
         $list = [];
         foreach ($filesList as $file) {
@@ -32,9 +35,11 @@ trait GetListFromOS
     public function getUsersDirectory()
     {
         $list = [];
-        $filesList = $this->runCommand(Statics::GET_USERS_DIRECTORY) ?? [];
+        $baseAddress = Statics::BASE_ADDRESS . Auth::user()->id;
+        $command = str_replace('{baseAddress}', $baseAddress, Statics::GET_USERS_DIRECTORY);
+        $filesList = $this->runCommand($command) ?? [];
         foreach ($filesList as $file) {
-            $list[] = str_replace(['/opt/myprogram/directory_', '/'], '', $file);
+            $list[] = str_replace([$baseAddress . '/directory_', '/'], '', $file);
         }
         return $list;
     }

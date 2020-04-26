@@ -11,9 +11,10 @@ namespace App\Core\General;
 
 class Statics
 {
-    const FILE_ADDRESS = '/opt/myprogram/file_';
-    const DIRECTORY_ADDRESS = '/opt/myprogram/directory_';
-    const GET_USERS_FILE = "ls -p /opt/myprogram | grep -v / | tr '\n' ','";
-    const GET_USERS_DIRECTORY = "ls -d /opt/myprogram/*/";
+    const BASE_ADDRESS = '/opt/myprogram/';
+    const FILE_ADDRESS = Statics::BASE_ADDRESS;
+    const DIRECTORY_ADDRESS = Statics::BASE_ADDRESS;
+    const GET_USERS_FILE = "ls -p {baseAddress} | grep -v / | tr '\n' ','";
+    const GET_USERS_DIRECTORY = "ls -d {baseAddress}/*/";
     const GET_RUNNING_PROCESS = "ps aux";
 }

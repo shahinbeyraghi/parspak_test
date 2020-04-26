@@ -15,9 +15,13 @@ use Illuminate\Support\Facades\Auth;
 trait FileManagement
 {
 
-    public function createFile()
+    /**
+     * @param $fileName
+     * @return bool|int
+     */
+    public function createFile($fileName)
     {
-        $address = Statics::FILE_ADDRESS . escapeshellcmd(Auth::user()->name);
+        $address = $this->generateFileAddress($fileName);
         if (is_file($address)) {
             return true;
         } elseif (!is_file($address)) {
@@ -27,16 +31,50 @@ trait FileManagement
     }
 
 
-    public function createDirectory()
+    /**
+     * @param $directoryName
+     * @return bool
+     */
+    public function createDirectory($directoryName)
     {
-        $address = Statics::DIRECTORY_ADDRESS . escapeshellcmd(Auth::user()->name);
+        $address = $this->generateDirectoryAddress($directoryName);
         if (is_dir($address)) {
             return true;
         }
+        return $this->returnOrCreateDir($address);
+    }
+
+    /**
+     * @param $fileName
+     * @return string
+     */
+    private function generateFileAddress($fileName)
+    {
+        $address = Statics::BASE_ADDRESS  . Auth::user()->id;
+        $this->returnOrCreateDir($address);
+        return $address . '/file_' . escapeshellcmd($fileName);
+    }
+
+    /**
+     * @param $directory
+     * @return string
+     */
+    private function generateDirectoryAddress($directory)
+    {
+        $address = Statics::BASE_ADDRESS  . Auth::user()->id;
+        $this->returnOrCreateDir($address);
+        return $address . '/directory_' . escapeshellcmd($directory);
+    }
+
+    /**
+     * @param $address
+     * @return boolean
+     */
+    private function returnOrCreateDir($address)
+    {
         if (!is_dir($address)) {
-            return mkdir("$address", 777, true);
+            return mkdir("$address", 0777, true);
         }
-        return false;
     }
 
 }

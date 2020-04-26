@@ -7,10 +7,15 @@
             @if(Session::has('message'))
                 <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
             @endif
+            @if($errors->first('file_name'))
+                <p class="alert alert-danger">{{ $errors->first('file_name') }}</p>
+            @endif
             <div class="card">
                 <div class="card-header">
                     Users File
-                    <a class="btn btn-outline-primary float-right" href="{{route('user-file')}}" role="button">Create File</a>
+                    <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#exampleModalCenter">
+                        Create File
+                    </button>
                 </div>
 
                 <div class="card-body">
@@ -35,4 +40,5 @@
         </div>
     </div>
 </div>
+    @include('user.user_file_form')
 @endsection

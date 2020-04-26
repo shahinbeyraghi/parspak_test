@@ -9,21 +9,29 @@
 namespace App\Http\Controllers\User;
 
 
-use App\Core\File\FileManagement;
-use App\Core\General\AppResponse;
+use App\Core\File\CreateUserDirectoryHandler;
+use App\Core\File\CreateUserDirectoryRequest;
+use App\Core\File\CreateUserFileHandler;
+use App\Core\File\CreateUserFileRequest;
+use App\Core\File\getUserDirectoriesHandler;
+use App\Core\File\getUserFilesHandler;
 use App\Core\OS\GetListFromOS;
 use App\Http\Controllers\General\AppBaseController;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class FileManagementController extends AppBaseController
 {
-    use FileManagement;
+
     use GetListFromOS;
 
-    public function createUserFile()
+    /**
+     * @param CreateUserFileRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function createUserFile(CreateUserFileRequest $request)
     {
-        $fileCreate = $this->createFile();
+        $fileCreate = (resolve(CreateUserFileHandler::class))->Handle($request);
         if ($fileCreate) {
             Session::flash('message', 'File Created');
             Session::flash('alert-class', 'alert-success');
@@ -34,9 +42,13 @@ class FileManagementController extends AppBaseController
         return redirect('users/files-name');
     }
 
-    public function createUserDirectory()
+    /**
+     * @param CreateUserDirectoryRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function createUserDirectory(CreateUserDirectoryRequest $request)
     {
-        $fileCreate = $this->createDirectory();
+        $fileCreate = (resolve(CreateUserDirectoryHandler::class))->Handle($request);
         if ($fileCreate) {
             Session::flash('message', 'Directory Created');
             Session::flash('alert-class', 'alert-success');
@@ -47,15 +59,23 @@ class FileManagementController extends AppBaseController
         return redirect('users/directories-name');
     }
 
-    public function listFiles()
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function listFiles(Request $request)
     {
-        $filesList = $this->getUsersFile();
+        $filesList = (resolve(getUserFilesHandler::class))->Handle($request);
         return view('user/users_file', compact('filesList'));
     }
 
-    public function listDirectories()
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function listDirectories(Request $request)
     {
-        $directoriesList = $this->getUsersDirectory();
+        $directoriesList = (resolve(getUserDirectoriesHandler::class))->Handle($request);
         return view('user/users_directory', compact('directoriesList'));
     }
 }

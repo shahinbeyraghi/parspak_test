@@ -28,7 +28,7 @@ Route::middleware('auth.basic')
     ->get('users/directories-name', 'User\FileManagementController@listDirectories')->name('directories-name');
 
 Route::middleware('auth.basic')
-    ->get('users/user-file', 'User\FileManagementController@createUserFile')->name('user-file');
+    ->post('users/user-file', 'User\FileManagementController@createUserFile')->name('user-file');
 
 Route::middleware('auth.basic')
-    ->get('users/user-directory', 'User\FileManagementController@createUserDirectory')->name('user-directory');
+    ->post('users/user-directory', 'User\FileManagementController@createUserDirectory')->name('user-directory');
