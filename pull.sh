@@ -1,0 +1,1 @@
+cd /var/www/html/test/parspak_test && git pull
